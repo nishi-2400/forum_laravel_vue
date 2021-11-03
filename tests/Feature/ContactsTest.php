@@ -6,15 +6,52 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Contact;
+use App\User;
 use Carbon\Carbon;
 
 class ContactsTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $user;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->user = factory(User::class)->create();
+    }
+
+    /** @test */
+    public function testRedirectToLogin()
+    {
+        $response = $this->post('/api/contacts', array_merge($this->data(), ['api_token' => '']));
+        $response->assertRedirect('/login');
+        $this->assertCount(0, Contact::all());
+    }
+
+    /** @test */
+    public function testRelateUserWithContact()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create();
+        $another_user = factory(User::class)->create();
+
+        $contact = factory(Contact::class)->create(['user_id' => $user->id]);
+        $another_contact = factory(Contact::class)->create(['user_id' => $another_user->id]);
+
+        $response = $this->get('/api/contacts?api_token=' . $user->api_token);
+
+        $response->assertJsonCount(1)->assertJson(
+            [['user_id' => $contact->user_id]]
+        );
+    }
+
     /** @test */
     public function testContactAdd()
     {
+        $this->withoutExceptionHandling();
+
         // store()へPOST
         $this->post('/api/contacts', $this->data());
 
@@ -56,8 +93,6 @@ class ContactsTest extends TestCase
     /** @test */
     public function testBirthdayValidation()
     {
-        $this->withoutExceptionHandling();
-
         // store()へPOST
         $response = $this->post(
             '/api/contacts',
@@ -73,8 +108,8 @@ class ContactsTest extends TestCase
     public function testGetContact()
     {
         // 擬似データの生成・取得
-        $contact = factory(Contact::class)->create();
-        $response = $this->get('/api/contacts/' . $contact->id);
+        $contact = factory(Contact::class)->create(['user_id' => $this->user->id]);
+        $response = $this->get('/api/contacts/' . $contact->id . '?api_token=' . $this->user->api_token);
 
         $response->assertJson([
             'id' => $contact->id,
@@ -86,10 +121,21 @@ class ContactsTest extends TestCase
     }
 
     /** @test */
+    public function testNotGetRelatedContact()
+    {
+        // 擬似データの生成・取得
+        $contact = factory(Contact::class)->create(['user_id' => $this->user->id]);
+        $another_user = factory(User::class)->create();
+        $response = $this->get('/api/contacts/' . $contact->id . '?api_token=' . $another_user->api_token);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
     public function testUpdateContact()
     {
         // 擬似データの生成・書き換え
-        $contact = factory(Contact::class)->create();
+        $contact = factory(Contact::class)->create(['user_id' => $this->user->id]);
         $response = $this->patch('/api/contacts/' . $contact->id, $this->data());
         $contact = $contact->fresh();
 
@@ -100,12 +146,36 @@ class ContactsTest extends TestCase
     }
 
     /** @test */
+    public function testUpdateNotRelatedContact()
+    {
+        // 擬似データの生成・書き換え
+        $contact = factory(Contact::class)->create();
+        $another_user = factory(User::class)->create();
+
+        $response = $this->patch(
+            '/api/contacts/' . $contact->id,
+            array_merge($this->data(), ['api_token' => $another_user->api_token])
+        );
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
     public function testDeleteContact()
     {
-        $this->withoutExceptionHandling();
-        $contact = factory(Contact::class)->create();
-        $response = $this->delete('/api/contacts/' . $contact->id);
+        $contact = factory(Contact::class)->create(['user_id' => $this->user->id]);
+        $response = $this->delete('/api/contacts/' . $contact->id, ['api_token' => $this->user->api_token]);
         $this->assertCount(0, Contact::all());
+    }
+
+    /** @test */
+    public function testDeleteNotRelatedContact()
+    {
+        $contact = factory(Contact::class)->create(['user_id' => $this->user->id]);
+        $another_user = factory(User::class)->create();
+
+        $response = $this->delete('/api/contacts/' . $contact->id, ['api_token' => $another_user->api_token]);
+        $response->assertStatus(403);
     }
 
     private function data()
@@ -115,6 +185,7 @@ class ContactsTest extends TestCase
             'email' => 'test@test.com',
             'birthday' => '05/19/1988',
             'company' => 'Test Company',
+            'api_token' => $this->user->api_token,
         ];
     }
 }

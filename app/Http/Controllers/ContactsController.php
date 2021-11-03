@@ -7,23 +7,40 @@ use Illuminate\Http\Request;
 
 class ContactsController extends Controller
 {
+    public function index()
+    {
+        return request()->user()->contacts;
+    }
+
     public function show(Contact $contact)
     {
+        if (request()->user()->isNot($contact->user)) {
+            return response([], 403);
+        }
+
         return $contact;
     }
 
     public function update(Contact $contact)
     {
-        $contact->update($this->validataData());　
+        if (request()->user()->isNot($contact->user)) {
+            return response([], 403);
+        }
+
+        $contact->update($this->validataData());
     }
 
     public function store()
     {
-        Contact::create($this->validataData());
+        request()->user()->contacts()->create($this->validataData());
     }
 
     public function destroy(Contact $contact)
     {
+        if (request()->user()->isNot($contact->user)) {
+            return response([], 403);
+        }
+
         $contact->delete();
     }
 
