@@ -14,7 +14,7 @@ class ContactsController extends Controller
 
     public function update(Contact $contact)
     {
-        $contact->update($this->validataData());
+        $contact->update($this->validataData());　
     }
 
     public function store()
