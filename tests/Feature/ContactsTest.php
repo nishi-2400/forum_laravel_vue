@@ -69,6 +69,45 @@ class ContactsTest extends TestCase
         $this->assertEquals('05-19-1988', Contact::first()->birthday->format('m-d-Y'));
     }
 
+    /** @test */
+    public function testGetContact()
+    {
+        // 擬似データの生成・取得
+        $contact = factory(Contact::class)->create();
+        $response = $this->get('/api/contacts/' . $contact->id);
+
+        $response->assertJson([
+            'id' => $contact->id,
+            'name' => $contact->name,
+            'email' => $contact->email,
+            'birthday' => $contact->birthday,
+            'company' => $contact->company,
+        ]);
+    }
+
+    /** @test */
+    public function testUpdateContact()
+    {
+        // 擬似データの生成・書き換え
+        $contact = factory(Contact::class)->create();
+        $response = $this->patch('/api/contacts/' . $contact->id, $this->data());
+        $contact = $contact->fresh();
+
+        $this->assertEquals('Test Name', $contact->name);
+        $this->assertEquals('test@test.com', $contact->email);
+        $this->assertEquals('05/19/1988', $contact->birthday->format('m/d/Y'));
+        $this->assertEquals('Test Company', $contact->company);
+    }
+
+    /** @test */
+    public function testDeleteContact()
+    {
+        $this->withoutExceptionHandling();
+        $contact = factory(Contact::class)->create();
+        $response = $this->delete('/api/contacts/' . $contact->id);
+        $this->assertCount(0, Contact::all());
+    }
+
     private function data()
     {
         return [
