@@ -5,9 +5,12 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpFoundation\Response;
+
 use App\Contact;
 use App\User;
 use Carbon\Carbon;
+
 
 class ContactsTest extends TestCase
 {
@@ -53,13 +56,28 @@ class ContactsTest extends TestCase
         $this->withoutExceptionHandling();
 
         // store()へPOST
-        $this->post('/api/contacts', $this->data());
+        $response = $this->post('/api/contacts', $this->data());
+
 
         $contact = Contact::first();
         $this->assertEquals('Test Name', $contact->name);
         $this->assertEquals('test@test.com', $contact->email);
         $this->assertEquals('05/19/1988', $contact->birthday->format('m/d/Y'));
         $this->assertEquals('Test Company', $contact->company);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertJson([
+            'data' => [
+                'contact_id' => $contact->id,
+                'name' => $contact->name,
+                'email' => $contact->email,
+                'birthday' => $contact->birthday->format('m/d/Y'),
+                'company' => $contact->company,
+                'last_updated' => $contact->updated_at->diffForHumans(),
+            ],
+            'links' => [
+                'self' => url('/contacts/' . $contact->id),
+            ],
+        ]);
     }
 
     /** @test */
