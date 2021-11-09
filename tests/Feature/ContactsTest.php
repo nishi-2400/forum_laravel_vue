@@ -45,8 +45,13 @@ class ContactsTest extends TestCase
 
         $response->assertJsonCount(1)->assertJson([
             'data' => [
-                ['contact_id' => $contact->id],
-            ],
+                [
+                    'data' => [
+                        'contact_id' => $contact->id,
+                    ],
+
+                ],
+            ]
         ]);
     }
 
@@ -75,7 +80,7 @@ class ContactsTest extends TestCase
                 'last_updated' => $contact->updated_at->diffForHumans(),
             ],
             'links' => [
-                'self' => url('/contacts/' . $contact->id),
+                'self' => $contact->path(),
             ],
         ]);
     }
@@ -128,7 +133,6 @@ class ContactsTest extends TestCase
         // 擬似データの生成・取得
         $contact = factory(Contact::class)->create(['user_id' => $this->user->id]);
         $response = $this->get('/api/contacts/' . $contact->id . '?api_token=' . $this->user->api_token);
-
         $response->assertJson([
             'data' => [
                 'contact_id' => $contact->id,
@@ -149,7 +153,7 @@ class ContactsTest extends TestCase
         $another_user = factory(User::class)->create();
         $response = $this->get('/api/contacts/' . $contact->id . '?api_token=' . $another_user->api_token);
 
-        $response->assertStatus(403);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     /** @test */
@@ -164,6 +168,15 @@ class ContactsTest extends TestCase
         $this->assertEquals('test@test.com', $contact->email);
         $this->assertEquals('05/19/1988', $contact->birthday->format('m/d/Y'));
         $this->assertEquals('Test Company', $contact->company);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJson([
+            'data' => [
+                'contact_id' => $contact->id,
+            ],
+            'links' => [
+                'self' => $contact->path(),
+            ],
+        ]);
     }
 
     /** @test */
@@ -178,7 +191,7 @@ class ContactsTest extends TestCase
             array_merge($this->data(), ['api_token' => $another_user->api_token])
         );
 
-        $response->assertStatus(403);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     /** @test */
@@ -187,6 +200,7 @@ class ContactsTest extends TestCase
         $contact = factory(Contact::class)->create(['user_id' => $this->user->id]);
         $response = $this->delete('/api/contacts/' . $contact->id, ['api_token' => $this->user->api_token]);
         $this->assertCount(0, Contact::all());
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
     /** @test */
@@ -196,7 +210,7 @@ class ContactsTest extends TestCase
         $another_user = factory(User::class)->create();
 
         $response = $this->delete('/api/contacts/' . $contact->id, ['api_token' => $another_user->api_token]);
-        $response->assertStatus(403);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     private function data()
