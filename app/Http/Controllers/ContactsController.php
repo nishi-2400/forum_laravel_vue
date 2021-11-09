@@ -28,6 +28,10 @@ class ContactsController extends Controller
         $this->authorize('update', $contact);
 
         $contact->update($this->validataData());
+
+        return (new ContactResource($contact))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     public function store()
@@ -36,7 +40,9 @@ class ContactsController extends Controller
         $contact = request()->user()->contacts()->create($this->validataData());
 
         // 取得したデータとステータスコードをリターン
-        return (new ContactResource($contact))->response()->setStatusCode(Response::HTTP_CREATED);
+        return (new ContactResource($contact))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function destroy(Contact $contact)
@@ -44,6 +50,8 @@ class ContactsController extends Controller
         $this->authorize('delete', $contact);
 
         $contact->delete();
+
+        return response([], Response::HTTP_NO_CONTENT);
     }
 
     private function validataData()
