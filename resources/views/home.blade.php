@@ -2,5 +2,7 @@
 
 @section('content')
 {{-- App: Vueのルートコンポーネント --}}
-<App></App>
+<App :user="{{ auth()->user() }}">
+    
+</App>
 @endsection
