@@ -4,24 +4,28 @@
       <InputField
         name="name"
         label="Contact Name"
+        :errors="errors"
         placeholder="Contact Name"
         @update:field="form.name = $event"
       ></InputField>
       <InputField
         name="email"
         label="Contact Email"
+        :errors="errors"
         placeholder="Contact Email"
         @update:field="form.email = $event"
       ></InputField>
       <InputField
         name="company"
         label="Company"
+        :errors="errors"
         placeholder="Company"
         @update:field="form.company = $event"
       ></InputField>
       <InputField
         name="birthday"
         label="Birthday"
+        :errors="errors"
         placeholder="MM/DD/YYYY"
         @update:field="form.birthday = $event"
       ></InputField>
@@ -49,7 +53,8 @@ export default {
         email: "",
         company: "",
         birthday: ""
-      }
+      },
+      errors: null
     };
   },
   methods: {
@@ -60,7 +65,7 @@ export default {
           console.log(response);
         })
         .catch(error => {
-          console.log(error);
+          this.errors = error.response.data.errors;
         });
     }
   }
