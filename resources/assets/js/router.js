@@ -11,7 +11,7 @@ export default new VueRouter({
   routes: [
     { path: "/", component: ExampleComponentVue },
     { path: "/contact/create", component: ContactCreate },
-    { path: "/contact/:id", component: ContactsShow }
+    { path: "/contacts/:id", component: ContactsShow }
   ],
   mode: "history" // #を削除
 });

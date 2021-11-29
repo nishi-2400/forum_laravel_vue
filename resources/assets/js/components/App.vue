@@ -57,9 +57,7 @@
         <!-- Right Top -->
         <div class="h-16 px-6 border-b border-gray-400 flex items-center justify-between">
           <div>Contacts</div>
-          <div
-            class="rounded-full text-white bg-blue-400 w-10 h-10 flex justify-center items-center border border-gray-400"
-          >YN</div>
+          <UserCircle :name="user.name"></UserCircle>
         </div>
 
         <!-- Right Bottom -->
@@ -72,10 +70,14 @@
 </template>
 <script>
 import axios from "axios";
+import UserCircle from "./UserCircle";
 
 export default {
   name: "App",
   props: ["user"],
+  components: {
+    UserCircle
+  },
   created() {
     axios.interceptors.request.use(config => {
       if (config.method === "get") {
