@@ -4,16 +4,33 @@
     <div v-else>
       <div class="flex justify-between">
         <div class="text-blue-400">Back</div>
-        <div>
+        <div class="relative">
           <router-link
             :to="'/contact/' + contact.id + '/edit'"
             class="px-4 py-2 rounded text-sm text-green-500 border border-green-500 font-bold mr-2"
           >Edit</router-link>
           <a
+            @click="modal = ! modal"
             href="#"
             class="px-4 py-2 rounded text-sm text-red-500 border border-red-500 font-bold"
           >Delete</a>
+
+          <div
+            v-if="modal"
+            class="absolute bg-blue-900 text-white rounded-lg z-20 p-8 w-64 right-0 mt-2 mr-6"
+          >
+            <p>Are you sure you want to delete this record?</p>
+            <div class="flex items-center mt-6 jsutify-end">
+              <button class="text-white pr-4" @click="modal = ! modal">Cancel</button>
+              <button class="px-4 py-2 bg-red-500 text-sm font-bold rounded" @click="destroy">Delete</button>
+            </div>
+          </div>
         </div>
+        <div
+          @click="modal = ! modal"
+          v-if="modal"
+          class="bg-black opacity-25 absolute right-0 left-0 top-0 bottom-0 z-10"
+        ></div>
       </div>
 
       <div class="flex items-center pt-6">
@@ -40,8 +57,22 @@ export default {
   data: function() {
     return {
       contact: {},
-      loading: true
+      loading: true,
+      modal: false
     };
+  },
+  methods: {
+    destroy() {
+      axios
+        .delete("/api/contacts/" + this.$route.params.id)
+        .then(response => {
+          this.$router.push("/contacts");
+        })
+        .catch(error => {
+          console.log(error);
+          alert("Internal Error. Unable to delete");
+        });
+    }
   },
   mounted() {
     axios
@@ -52,7 +83,10 @@ export default {
       })
       .catch(error => {
         console.log(error);
-        this.loading = false;
+        this.loading = true;
+        if (error.response.status == 404) {
+          this.$router.push("/contacts");
+        }
       });
   }
 };
