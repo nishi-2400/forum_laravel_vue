@@ -16,7 +16,7 @@
 <script>
 export default {
   name: "InputField",
-  props: ["name", "label", "placeholder", "errors"],
+  props: ["name", "label", "placeholder", "errors", "data"],
   data: function() {
     return {
       value: ""
@@ -48,8 +48,13 @@ export default {
     },
     errorClassObject: function() {
       return {
-        "error-field": this.hasError,
+        "error-field": this.hasError
       };
+    }
+  },
+  watch: {
+    data: function(val) {
+      this.value = val;
     }
   }
 };
