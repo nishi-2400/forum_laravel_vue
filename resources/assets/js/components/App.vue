@@ -21,7 +21,7 @@
 
           <p class="pl-3 pt-12 text-xs text-gray-500 uppercase font-bold">general</p>
           <router-link
-            to="/"
+            to="/contacts"
             class="flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300"
           >
             <div>
