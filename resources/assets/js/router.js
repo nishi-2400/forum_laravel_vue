@@ -5,17 +5,49 @@ import ExampleComponentVue from "./components/ExampleComponent";
 import ContactCreate from "./views/ContactsCreate";
 import ContactsShow from "./views/ContactsShow";
 import ContactsEdit from "./views/ContactsEdit";
-import ContactIndex from "./views/ContactsIndex.vue";
+import ContactIndex from "./views/ContactsIndex";
+import BirthdaysIndex from "./views/BirthdaysIndex";
+import Logout from "./actions/Logout";
 
 Vue.use(VueRouter);
 
 export default new VueRouter({
   routes: [
-    { path: "/", component: ExampleComponentVue },
-    { path: "/contacts", component: ContactIndex },
-    { path: "/contact/create", component: ContactCreate },
-    { path: "/contacts/:id", component: ContactsShow },
-    { path: "/contacts/:id/edit", component: ContactsEdit }
+    {
+      path: "/",
+      component: ExampleComponentVue,
+      meta: { title: "Welcome!!" }
+    },
+    {
+      path: "/contacts",
+      component: ContactIndex,
+      meta: { title: "Contacts" }
+    },
+    {
+      path: "/birthdays",
+      component: BirthdaysIndex,
+      meta: { title: "Brithdays" }
+    },
+    {
+      path: "/contact/create",
+      component: ContactCreate,
+      meta: { title: "Create Contact" }
+    },
+    {
+      path: "/contacts/:id",
+      component: ContactsShow,
+      meta: { title: "Contact Detail" }
+    },
+    {
+      path: "/contacts/:id/edit",
+      component: ContactsEdit,
+      meta: { title: "Edit Contact" }
+    },
+    {
+      path: "/logout",
+      component: Logout,
+      meta: { title: "Logout" }
+    }
   ],
   mode: "history" // #を削除
 });
