@@ -8,7 +8,9 @@
             <router-link to="/">Forum with Laravel / Vue</router-link>
           </h1>
 
-          <p class="pl-3 pt-12 text-xs text-gray-500 uppercase font-bold">create</p>
+          <p class="pl-3 pt-12 text-xs text-gray-500 uppercase font-bold">
+            create
+          </p>
           <router-link
             to="/contact/create"
             class="flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300"
@@ -19,7 +21,9 @@
             </div>
           </router-link>
 
-          <p class="pl-3 pt-12 text-xs text-gray-500 uppercase font-bold">general</p>
+          <p class="pl-3 pt-12 text-xs text-gray-500 uppercase font-bold">
+            general
+          </p>
           <router-link
             to="/contacts"
             class="flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300"
@@ -30,7 +34,7 @@
             </div>
           </router-link>
           <router-link
-            to="/"
+            to="/birthdays"
             class="flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300"
           >
             <div>
@@ -39,9 +43,11 @@
             </div>
           </router-link>
 
-          <p class="pl-3 pt-12 text-xs text-gray-500 uppercase font-bold">settings</p>
+          <p class="pl-3 pt-12 text-xs text-gray-500 uppercase font-bold">
+            settings
+          </p>
           <router-link
-            to="/"
+            to="/logout"
             class="flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300"
           >
             <div>
@@ -55,9 +61,15 @@
       <!-- Right Section -->
       <div class="flex flex-col flex-1 h-screen overflow-y-hidden">
         <!-- Right Top -->
-        <div class="h-16 px-6 border-b border-gray-400 flex items-center justify-between">
-          <div>Contacts</div>
-          <UserCircle :name="user.name"></UserCircle>
+        <div
+          class="h-16 px-6 border-b border-gray-400 flex items-center justify-between"
+        >
+          <div>{{ title }}</div>
+
+          <div class="flex items-center">
+            <SearchBar></SearchBar>
+            <UserCircle :name="user.name"></UserCircle>
+          </div>
         </div>
 
         <!-- Right Bottom -->
@@ -71,14 +83,29 @@
 <script>
 import axios from "axios";
 import UserCircle from "./UserCircle";
+import SearchBar from "./SearchBar";
 
 export default {
   name: "App",
   props: ["user"],
   components: {
-    UserCircle
+    UserCircle,
+    SearchBar
+  },
+  data: function() {
+    return { title: "" };
+  },
+  watch: {
+    $route(to, from) {
+      this.title = to.meta.title;
+    },
+    title() {
+      document.title = this.title;
+    }
   },
   created() {
+    this.title = this.$route.meta.title;
+
     axios.interceptors.request.use(config => {
       if (config.method === "get") {
         config.url = config.url + "?api_token=" + this.user.api_token;
