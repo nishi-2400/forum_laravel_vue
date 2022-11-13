@@ -536,6 +536,33 @@ module.exports = __webpack_require__(38);
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -677,7 +704,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -700,33 +727,6 @@ Cancel.prototype.toString = function toString() {
 Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
 
 
 /***/ }),
@@ -1188,8 +1188,8 @@ var buildFullPath = __webpack_require__(46);
 var parseHeaders = __webpack_require__(49);
 var isURLSameOrigin = __webpack_require__(50);
 var createError = __webpack_require__(14);
-var defaults = __webpack_require__(3);
-var Cancel = __webpack_require__(4);
+var defaults = __webpack_require__(4);
+var Cancel = __webpack_require__(5);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -1595,8 +1595,8 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(20);
-__webpack_require__(81);
-module.exports = __webpack_require__(82);
+__webpack_require__(83);
+module.exports = __webpack_require__(84);
 
 
 /***/ }),
@@ -13638,7 +13638,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(22).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(22).setImmediate))
 
 /***/ }),
 /* 22 */
@@ -13708,7 +13708,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
 /* 23 */
@@ -13901,7 +13901,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(8)))
 
 /***/ }),
 /* 24 */
@@ -18542,7 +18542,7 @@ var utils = __webpack_require__(0);
 var bind = __webpack_require__(10);
 var Axios = __webpack_require__(39);
 var mergeConfig = __webpack_require__(16);
-var defaults = __webpack_require__(3);
+var defaults = __webpack_require__(4);
 
 /**
  * Create an instance of Axios
@@ -18575,7 +18575,7 @@ var axios = createInstance(defaults);
 axios.Axios = Axios;
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(4);
+axios.Cancel = __webpack_require__(5);
 axios.CancelToken = __webpack_require__(52);
 axios.isCancel = __webpack_require__(15);
 axios.VERSION = __webpack_require__(17).version;
@@ -18821,8 +18821,8 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(42);
 var isCancel = __webpack_require__(15);
-var defaults = __webpack_require__(3);
-var Cancel = __webpack_require__(4);
+var defaults = __webpack_require__(4);
+var Cancel = __webpack_require__(5);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -18913,7 +18913,7 @@ module.exports = function dispatchRequest(config) {
 
 
 var utils = __webpack_require__(0);
-var defaults = __webpack_require__(3);
+var defaults = __webpack_require__(4);
 
 /**
  * Transform the data for a request or a response
@@ -19345,7 +19345,7 @@ module.exports = {
 "use strict";
 
 
-var Cancel = __webpack_require__(4);
+var Cancel = __webpack_require__(5);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -20707,7 +20707,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(76)
 /* template */
-var __vue_template__ = __webpack_require__(80)
+var __vue_template__ = __webpack_require__(82)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -20892,7 +20892,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(78)
 /* template */
-var __vue_template__ = __webpack_require__(79)
+var __vue_template__ = __webpack_require__(81)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -20940,7 +20940,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UserCircle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__UserCircle__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash__);
 //
 //
@@ -21016,335 +21016,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 /* 79 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.focus
-      ? _c("div", {
-          staticClass:
-            "absolute bg-black opacity-25 right-0 left-0 top-0 bottom-0 z-10",
-          on: {
-            click: function($event) {
-              _vm.focus = false
-            }
-          }
-        })
-      : _vm._e(),
-    _vm._v(" "),
-    _c("div", { staticClass: "relative z-10" }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.searchTerm,
-            expression: "searchTerm"
-          }
-        ],
-        staticClass:
-          "w-64 mr-6 bg-gray-200 border border-gray-400 pl-8 pr-3 py-1 rounded rounded-full text-sm focus:outline-none focus:border-blue-500 focus:shahdow focus:bg-gray-100",
-        attrs: { type: "text", placeholder: "Search...", id: "searchTerm" },
-        domProps: { value: _vm.searchTerm },
-        on: {
-          input: [
-            function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.searchTerm = $event.target.value
-            },
-            _vm.search
-          ],
-          focus: function($event) {
-            _vm.focus = true
-          }
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _vm.focus
-      ? _c(
-          "div",
-          {
-            staticClass:
-              "absolute bg-blue-900 text-white rounded-lg p-4 w-96 right-0 mr-6  mt-2 shadow z-20"
-          },
-          [
-            _vm.results == 0
-              ? _c("div", [
-                  _vm._v(
-                    'No results found for "' + _vm._s(_vm.searchTerm) + '"'
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm._l(_vm.results, function(result) {
-              return _c(
-                "div",
-                {
-                  on: {
-                    click: function($event) {
-                      _vm.focus = false
-                    }
-                  }
-                },
-                [
-                  _c(
-                    "router-link",
-                    {
-                      staticClass: "block py-2",
-                      attrs: { to: result.links.self }
-                    },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "flex items-center" },
-                        [
-                          _c("UserCircle", {
-                            attrs: { name: result.data.name }
-                          }),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "pl-3" }, [
-                            _c("p", [_vm._v(_vm._s(result.data.name))]),
-                            _vm._v(" "),
-                            _c("p", [_vm._v(_vm._s(result.data.company))])
-                          ])
-                        ],
-                        1
-                      )
-                    ]
-                  )
-                ],
-                1
-              )
-            })
-          ],
-          2
-        )
-      : _vm._e()
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-f8be00b8", module.exports)
-  }
-}
-
-/***/ }),
-/* 80 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "h-screen bg-white" }, [
-    _c("div", { staticClass: "flex" }, [
-      _c(
-        "div",
-        { staticClass: "bg-gray-200 w-48 h-screen border-r-2 border-gray-400" },
-        [
-          _c(
-            "nav",
-            [
-              _c(
-                "h1",
-                {
-                  staticClass: "pl-3 pt-4 fill-current text-blue-600 text-2xl"
-                },
-                [
-                  _c("router-link", { attrs: { to: "/" } }, [
-                    _vm._v("Forum with Laravel / Vue")
-                  ])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass:
-                    "pl-3 pt-12 text-xs text-gray-500 uppercase font-bold"
-                },
-                [_vm._v("\n          create\n        ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "router-link",
-                {
-                  staticClass:
-                    "flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300",
-                  attrs: { to: "/contact/create" }
-                },
-                [
-                  _c("div", [
-                    _c("i", {
-                      staticClass: "far fa-plus-square text-blue-600"
-                    }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "tracking-wide pl-1" }, [
-                      _vm._v("Add New")
-                    ])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass:
-                    "pl-3 pt-12 text-xs text-gray-500 uppercase font-bold"
-                },
-                [_vm._v("\n          general\n        ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "router-link",
-                {
-                  staticClass:
-                    "flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300",
-                  attrs: { to: "/contacts" }
-                },
-                [
-                  _c("div", [
-                    _c("i", {
-                      staticClass: "far fa-calendar-alt text-blue-600"
-                    }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "tracking-wide pl-1" }, [
-                      _vm._v("Contacts")
-                    ])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "router-link",
-                {
-                  staticClass:
-                    "flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300",
-                  attrs: { to: "/birthdays" }
-                },
-                [
-                  _c("div", [
-                    _c("i", {
-                      staticClass: "fas fa-birthday-cake text-blue-600"
-                    }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "tracking-wide pl-1" }, [
-                      _vm._v("Birthday")
-                    ])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass:
-                    "pl-3 pt-12 text-xs text-gray-500 uppercase font-bold"
-                },
-                [_vm._v("\n          settings\n        ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "router-link",
-                {
-                  staticClass:
-                    "flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300",
-                  attrs: { to: "/logout" }
-                },
-                [
-                  _c("div", [
-                    _c("i", {
-                      staticClass: "fas fa-sign-out-alt text-blue-600"
-                    }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "tracking-wide pl-1" }, [
-                      _vm._v("Logout")
-                    ])
-                  ])
-                ]
-              )
-            ],
-            1
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "flex flex-col flex-1 h-screen overflow-y-hidden" },
-        [
-          _c(
-            "div",
-            {
-              staticClass:
-                "h-16 px-6 border-b border-gray-400 flex items-center justify-between"
-            },
-            [
-              _c("div", [_vm._v(_vm._s(_vm.title))]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "flex items-center" },
-                [
-                  _c("SearchBar"),
-                  _vm._v(" "),
-                  _c("UserCircle", { attrs: { name: _vm.user.name } })
-                ],
-                1
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "flex flex-col overflow-y-hidden flex-1" },
-            [_c("router-view", { staticClass: "p-6 overflow-x-hidden" })],
-            1
-          )
-        ]
-      )
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-8142f38c", module.exports)
-  }
-}
-
-/***/ }),
-/* 81 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 83 */,
-/* 84 */,
-/* 85 */,
-/* 86 */,
-/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -38558,10 +38229,10 @@ if (false) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(88)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(80)(module)))
 
 /***/ }),
-/* 88 */
+/* 80 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -38587,6 +38258,331 @@ module.exports = function(module) {
 	return module;
 };
 
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm.focus
+      ? _c("div", {
+          staticClass:
+            "absolute bg-black opacity-25 right-0 left-0 top-0 bottom-0 z-10",
+          on: {
+            click: function($event) {
+              _vm.focus = false
+            }
+          }
+        })
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "relative z-10" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.searchTerm,
+            expression: "searchTerm"
+          }
+        ],
+        staticClass:
+          "w-64 mr-6 bg-gray-200 border border-gray-400 pl-8 pr-3 py-1 rounded rounded-full text-sm focus:outline-none focus:border-blue-500 focus:shahdow focus:bg-gray-100",
+        attrs: { type: "text", placeholder: "Search...", id: "searchTerm" },
+        domProps: { value: _vm.searchTerm },
+        on: {
+          input: [
+            function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchTerm = $event.target.value
+            },
+            _vm.search
+          ],
+          focus: function($event) {
+            _vm.focus = true
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _vm.focus
+      ? _c(
+          "div",
+          {
+            staticClass:
+              "absolute bg-blue-900 text-white rounded-lg p-4 w-96 right-0 mr-6  mt-2 shadow z-20"
+          },
+          [
+            _vm.results == 0
+              ? _c("div", [
+                  _vm._v(
+                    'No results found for "' + _vm._s(_vm.searchTerm) + '"'
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._l(_vm.results, function(result) {
+              return _c(
+                "div",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.focus = false
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "block py-2",
+                      attrs: { to: result.links.self }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "flex items-center" },
+                        [
+                          _c("UserCircle", {
+                            attrs: { name: result.data.name }
+                          }),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "pl-3" }, [
+                            _c("p", [_vm._v(_vm._s(result.data.name))]),
+                            _vm._v(" "),
+                            _c("p", [_vm._v(_vm._s(result.data.company))])
+                          ])
+                        ],
+                        1
+                      )
+                    ]
+                  )
+                ],
+                1
+              )
+            })
+          ],
+          2
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-f8be00b8", module.exports)
+  }
+}
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "h-screen bg-white" }, [
+    _c("div", { staticClass: "flex" }, [
+      _c(
+        "div",
+        { staticClass: "bg-gray-200 w-48 h-screen border-r-2 border-gray-400" },
+        [
+          _c(
+            "nav",
+            [
+              _c(
+                "h1",
+                {
+                  staticClass: "pl-3 pt-4 fill-current text-blue-600 text-2xl"
+                },
+                [
+                  _c("router-link", { attrs: { to: "/" } }, [
+                    _vm._v("Forum with Laravel / Vue")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass:
+                    "pl-3 pt-12 text-xs text-gray-500 uppercase font-bold"
+                },
+                [_vm._v("\n          create\n        ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass:
+                    "flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300",
+                  attrs: { to: "/contact/create" }
+                },
+                [
+                  _c("div", [
+                    _c("i", {
+                      staticClass: "far fa-plus-square text-blue-600"
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "tracking-wide pl-1" }, [
+                      _vm._v("Add New")
+                    ])
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass:
+                    "pl-3 pt-12 text-xs text-gray-500 uppercase font-bold"
+                },
+                [_vm._v("\n          general\n        ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass:
+                    "flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300",
+                  attrs: { to: "/contacts" }
+                },
+                [
+                  _c("div", [
+                    _c("i", {
+                      staticClass: "far fa-calendar-alt text-blue-600"
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "tracking-wide pl-1" }, [
+                      _vm._v("Contacts")
+                    ])
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass:
+                    "flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300",
+                  attrs: { to: "/birthdays" }
+                },
+                [
+                  _c("div", [
+                    _c("i", {
+                      staticClass: "fas fa-birthday-cake text-blue-600"
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "tracking-wide pl-1" }, [
+                      _vm._v("Birthday")
+                    ])
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "p",
+                {
+                  staticClass:
+                    "pl-3 pt-12 text-xs text-gray-500 uppercase font-bold"
+                },
+                [_vm._v("\n          settings\n        ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass:
+                    "flex pl-3 items-center py-2 hover:text-blue-600 hover:bg-gray-300",
+                  attrs: { to: "/logout" }
+                },
+                [
+                  _c("div", [
+                    _c("i", {
+                      staticClass: "fas fa-sign-out-alt text-blue-600"
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "tracking-wide pl-1" }, [
+                      _vm._v("Logout")
+                    ])
+                  ])
+                ]
+              )
+            ],
+            1
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "flex flex-col flex-1 h-screen overflow-y-hidden" },
+        [
+          _c(
+            "div",
+            {
+              staticClass:
+                "h-16 px-6 border-b border-gray-400 flex items-center justify-between"
+            },
+            [
+              _c("div", [_vm._v(_vm._s(_vm.title))]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "flex items-center" },
+                [
+                  _c("SearchBar"),
+                  _vm._v(" "),
+                  _c("UserCircle", { attrs: { name: _vm.user.name } })
+                ],
+                1
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "flex flex-col overflow-y-hidden flex-1" },
+            [_c("router-view", { staticClass: "p-6 overflow-x-hidden" })],
+            1
+          )
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-8142f38c", module.exports)
+  }
+}
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
